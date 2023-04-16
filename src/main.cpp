@@ -18,10 +18,10 @@ static char m_linky_serial[12 + 1] = "";
 
 /* Wireless messages */
 static MyMessage m_message_info_serial(0, V_TEXT);
-static MyMessage m_message_power_watt(1, V_WATT);
 static MyMessage m_message_power_kwh(1, V_KWH);
-static MyMessage m_message_multimeter_voltage(2, V_VOLTAGE);
-static MyMessage m_message_multimeter_current(2, V_CURRENT);
+static MyMessage m_message_power_watt(2, V_WATT);
+static MyMessage m_message_multimeter_voltage(3, V_VOLTAGE);
+static MyMessage m_message_multimeter_current(3, V_CURRENT);
 
 /**
  *
@@ -58,9 +58,12 @@ void setup() {
  */
 void presentation() {
     sendSketchInfo("SLHA00011 Linky", "0.1.0");
-    present(0, S_INFO);        // V_TEXT
-    present(1, S_POWER);       // Power measuring device, like power meters: V_WATT, V_KWH
-    present(2, S_MULTIMETER);  // Multimeter device:                         V_VOLTAGE, V_CURRENT, V_IMPEDANCE
+    present(0, S_INFO, "Numéro de Série");       // V_TEXT (ADCO, ADSC)
+    present(1, S_POWER, "Index Base");           // V_KWH (BASE)
+    present(2, S_POWER, "Puissance Apparente");  // V_WATT (PAPP)
+    present(3, S_MULTIMETER, "Phase 1");         // V_VOLTAGE (URMS1) and V_CURRENT (IINST, IINST1, IRMS1)
+    present(4, S_MULTIMETER, "Phase 2");         // V_VOLTAGE (URMS2) and V_CURRENT (IINST2, IRMS2)
+    present(5, S_MULTIMETER, "Phase 3");         // V_VOLTAGE (URMS3) and V_CURRENT (IINST3, IRMS3)
 }
 
 /**
