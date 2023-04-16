@@ -12,7 +12,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 
-/* Volative working variables */
+/* Working variables */
 static linky_tic m_linky;
 static char m_linky_serial[12 + 1] = "";
 
@@ -88,14 +88,13 @@ void loop() {
         if (strcmp(dataset.name, "ADCO") == 0) {
             if (strlen(m_linky_serial) == 0) {
                 strncpy(m_linky_serial, dataset.data, 12);
-                // Serial.printf(" [i] Serial is %s\r\n", m_linky_serial);
                 send(m_message_info_serial.set(m_linky_serial));
             }
         }
 
         /* Index for base */
         else if (strcmp(dataset.name, "BASE") == 0) {
-            static uint32_t base_wh_last;
+            static uint32_t base_wh_last = 0;
             uint32_t base_wh = 0;
             for (size_t i = 0; i < 9; i++) {
                 if (dataset.data[i] >= '0' && dataset.data[i] <= '9') {
@@ -106,7 +105,6 @@ void loop() {
                 }
             }
             if (base_wh > base_wh_last) {
-                // Serial.printf(" [i] Base = %llu Wh\r\n", base_wh);
                 send(m_message_power_kwh.set(base_wh / 1000.0, 3));
                 base_wh_last = base_wh;
             }
