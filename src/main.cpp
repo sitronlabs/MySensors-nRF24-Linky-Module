@@ -24,6 +24,20 @@ static MyMessage m_message_multimeter_voltage(3, V_VOLTAGE);
 static MyMessage m_message_multimeter_current(3, V_CURRENT);
 
 /**
+ * Setup function.
+ * Called before MySensors does anything.
+ */
+void preHwInit() {
+
+    /* Setup leds
+     * Ensures tic link led is off at startup */
+    pinMode(CONFIG_LED_LINKY_GREEN_PIN, OUTPUT);
+    pinMode(CONFIG_LED_LINKY_RED_PIN, OUTPUT);
+    digitalWrite(CONFIG_LED_LINKY_GREEN_PIN, LOW);
+    digitalWrite(CONFIG_LED_LINKY_RED_PIN, LOW);
+}
+
+/**
  *
  */
 void setup_failed(const char *const reason) {
@@ -47,7 +61,7 @@ void setup() {
 
     /* Setup linky */
     res = 0;
-    res |= m_linky.setup(2, 3);
+    res |= m_linky.setup(CONFIG_LINKY_DATA_PIN, CONFIG_LINKY_DUMMY_PIN);
     res |= m_linky.begin();
     if (res < 0) {
         setup_failed(" [e] Failed to communicate with linky!");
@@ -79,17 +93,81 @@ void receive(const MyMessage &message) {
 void loop() {
     int res;
 
+    /* Led task */
+    static bool linky_valid = false;
+    static uint32_t m_led_timestamp = 0;
+    static enum {
+        STATE_0,
+        STATE_1,
+        STATE_2,
+        STATE_3,
+        STATE_4,
+        STATE_5,
+        STATE_6,
+    } m_led_sm;
+    switch (m_led_sm) {
+        case STATE_0: {
+            if (linky_valid) {
+                m_led_sm = STATE_1;
+            } else {
+                m_led_sm = STATE_4;
+            }
+            break;
+        }
+        case STATE_1: {
+            digitalWrite(CONFIG_LED_LINKY_RED_PIN, LOW);
+            digitalWrite(CONFIG_LED_LINKY_GREEN_PIN, HIGH);
+            m_led_timestamp = millis();
+            m_led_sm = STATE_2;
+            break;
+        }
+        case STATE_2: {
+            if (millis() - m_led_timestamp >= 100) {
+                digitalWrite(CONFIG_LED_LINKY_GREEN_PIN, LOW);
+                m_led_sm = STATE_3;
+            }
+            break;
+        }
+        case STATE_3: {
+            if (millis() - m_led_timestamp >= 3000) {
+                m_led_sm = STATE_0;
+            }
+            break;
+        }
+        case STATE_4: {
+            digitalWrite(CONFIG_LED_LINKY_GREEN_PIN, LOW);
+            digitalWrite(CONFIG_LED_LINKY_RED_PIN, HIGH);
+            m_led_timestamp = millis();
+            m_led_sm = STATE_5;
+            break;
+        }
+        case STATE_5: {
+            if (millis() - m_led_timestamp >= 100) {
+                digitalWrite(CONFIG_LED_LINKY_RED_PIN, LOW);
+                m_led_sm = STATE_6;
+            }
+            break;
+        }
+        case STATE_6: {
+            if (millis() - m_led_timestamp >= 1000) {
+                m_led_sm = STATE_0;
+            }
+            break;
+        }
+    }
+
     /* Linky task */
     struct linky_tic::dataset dataset = {0};
     res = m_linky.dataset_get(dataset);
     if (res < 0) {
         Serial.println(" [e] Linky error!");
-        return;
+        linky_valid = false;
     } else if (res == 1) {
         Serial.printf(" [d] Received dataset %s = %s\r\n", dataset.name, dataset.data);
+        linky_valid = true;
 
         /* Serial number */
-        if (strcmp(dataset.name, "ADCO") == 0) {
+        if (strcmp(dataset.name, "ADCO") == 0 || strcmp(dataset.name, "ADSC") == 0) {
             if (strlen(m_linky_serial) == 0) {
                 strncpy(m_linky_serial, dataset.data, 12);
                 send(m_message_info_serial.set(m_linky_serial));
