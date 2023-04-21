@@ -20,8 +20,12 @@ static char m_linky_serial[12 + 1] = "";
 static MyMessage m_message_info_serial(0, V_TEXT);
 static MyMessage m_message_power_kwh(1, V_KWH);
 static MyMessage m_message_power_watt(2, V_WATT);
-static MyMessage m_message_multimeter_voltage(3, V_VOLTAGE);
-static MyMessage m_message_multimeter_current(3, V_CURRENT);
+static MyMessage m_message_phase1_voltage(3, V_VOLTAGE);
+static MyMessage m_message_phase1_current(3, V_CURRENT);
+static MyMessage m_message_phase2_voltage(4, V_VOLTAGE);
+static MyMessage m_message_phase2_current(4, V_CURRENT);
+static MyMessage m_message_phase3_voltage(5, V_VOLTAGE);
+static MyMessage m_message_phase3_current(5, V_CURRENT);
 
 /**
  * Setup function.
@@ -192,24 +196,6 @@ void loop() {
             }
         }
 
-        /* Intensité Instantanée */
-        else if (strcmp(dataset.name, "IINST") == 0) {
-            static uint32_t current_a_last = 0;
-            uint32_t current_a = 0;
-            for (size_t i = 0; i < 3; i++) {
-                if (dataset.data[i] >= '0' && dataset.data[i] <= '9') {
-                    current_a *= 10;
-                    current_a += dataset.data[i] - '0';
-                } else {
-                    break;
-                }
-            }
-            if (current_a != current_a_last) {
-                send(m_message_multimeter_current.set(current_a));
-                current_a_last = current_a;
-            }
-        }
-
         /* Puissance apparente */
         else if (strcmp(dataset.name, "PAPP") == 0) {
             static uint32_t power_va_last = 0;
@@ -226,6 +212,114 @@ void loop() {
                 send(m_message_power_watt.set(power_va));
                 power_va_last = power_va;
             }
+        }
+    }
+
+    /* Intensité Phase 1 */
+    else if (strcmp(dataset.name, "IINST") == 0 || strcmp(dataset.name, "IINST1") == 0 || strcmp(dataset.name, "IRMS1") == 0) {
+        static uint32_t current_a_last = 0;
+        uint32_t current_a = 0;
+        for (size_t i = 0; i < 3; i++) {
+            if (dataset.data[i] >= '0' && dataset.data[i] <= '9') {
+                current_a *= 10;
+                current_a += dataset.data[i] - '0';
+            } else {
+                break;
+            }
+        }
+        if (current_a != current_a_last) {
+            send(m_message_phase1_current.set(current_a));
+            current_a_last = current_a;
+        }
+    }
+
+    /* Tension Phase 1 */
+    else if (strcmp(dataset.name, "URMS1") == 0) {
+        static uint16_t voltage_v_last = 0;
+        uint16_t voltage_a = 0;
+        for (size_t i = 0; i < 3; i++) {
+            if (dataset.data[i] >= '0' && dataset.data[i] <= '9') {
+                voltage_a *= 10;
+                voltage_a += dataset.data[i] - '0';
+            } else {
+                break;
+            }
+        }
+        if (voltage_a != voltage_v_last) {
+            send(m_message_phase1_voltage.set(voltage_a));
+            voltage_v_last = voltage_a;
+        }
+    }
+
+    /* Intensité Phase 2 */
+    else if (strcmp(dataset.name, "IINST2") == 0 || strcmp(dataset.name, "IRMS2") == 0) {
+        static uint32_t current_a_last = 0;
+        uint32_t current_a = 0;
+        for (size_t i = 0; i < 3; i++) {
+            if (dataset.data[i] >= '0' && dataset.data[i] <= '9') {
+                current_a *= 10;
+                current_a += dataset.data[i] - '0';
+            } else {
+                break;
+            }
+        }
+        if (current_a != current_a_last) {
+            send(m_message_phase2_current.set(current_a));
+            current_a_last = current_a;
+        }
+    }
+
+    /* Tension Phase 2 */
+    else if (strcmp(dataset.name, "URMS2") == 0) {
+        static uint16_t voltage_v_last = 0;
+        uint16_t voltage_a = 0;
+        for (size_t i = 0; i < 3; i++) {
+            if (dataset.data[i] >= '0' && dataset.data[i] <= '9') {
+                voltage_a *= 10;
+                voltage_a += dataset.data[i] - '0';
+            } else {
+                break;
+            }
+        }
+        if (voltage_a != voltage_v_last) {
+            send(m_message_phase2_voltage.set(voltage_a));
+            voltage_v_last = voltage_a;
+        }
+    }
+
+    /* Intensité Phase 3 */
+    else if (strcmp(dataset.name, "IINST3") == 0 || strcmp(dataset.name, "IRMS3") == 0) {
+        static uint32_t current_a_last = 0;
+        uint32_t current_a = 0;
+        for (size_t i = 0; i < 3; i++) {
+            if (dataset.data[i] >= '0' && dataset.data[i] <= '9') {
+                current_a *= 10;
+                current_a += dataset.data[i] - '0';
+            } else {
+                break;
+            }
+        }
+        if (current_a != current_a_last) {
+            send(m_message_phase3_current.set(current_a));
+            current_a_last = current_a;
+        }
+    }
+
+    /* Tension Phase 3 */
+    else if (strcmp(dataset.name, "URMS3") == 0) {
+        static uint16_t voltage_v_last = 0;
+        uint16_t voltage_a = 0;
+        for (size_t i = 0; i < 3; i++) {
+            if (dataset.data[i] >= '0' && dataset.data[i] <= '9') {
+                voltage_a *= 10;
+                voltage_a += dataset.data[i] - '0';
+            } else {
+                break;
+            }
+        }
+        if (voltage_a != voltage_v_last) {
+            send(m_message_phase3_voltage.set(voltage_a));
+            voltage_v_last = voltage_a;
         }
     }
 }
