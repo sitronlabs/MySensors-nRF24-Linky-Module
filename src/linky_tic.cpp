@@ -140,14 +140,14 @@ int linky_tic::dataset_get(struct dataset &dataset) {
 
                 /* If we receive the end of dataset character */
                 if (rx == 0x0D) {
-                    Serial.print(" [d] Dataseet:");
-                    for (size_t i = 0; i < m_buffer_index; i++) {
-                        if ((m_buffer[i] >= 0x30 && m_buffer[i] <= 0x5A))
-                            Serial.printf(" %c", m_buffer[i]);
-                        else
-                            Serial.printf(" 0x%02X", m_buffer[i]);
-                    }
-                    Serial.println();
+                    // Serial.print(" [d] Dataseet:");
+                    // for (size_t i = 0; i < m_buffer_index; i++) {
+                    //     if ((m_buffer[i] >= 0x30 && m_buffer[i] <= 0x5A))
+                    //         Serial.printf(" %c", m_buffer[i]);
+                    //     else
+                    //         Serial.printf(" 0x%02X", m_buffer[i]);
+                    // }
+                    // Serial.println();
 
                     /* Verify checksum:
                      *  - for historic datasets, where the splitter char is 0x20, the checksum doesn't include the last splitter char,

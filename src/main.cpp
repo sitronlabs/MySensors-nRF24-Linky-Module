@@ -35,7 +35,8 @@ void setup_failed(const char *const reason) {
 }
 
 /**
- *
+ * Setup function.
+ * Called once MySensors has successfully initialized.
  */
 void setup() {
     int res;
