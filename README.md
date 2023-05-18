@@ -23,3 +23,23 @@ The TIC output provides a lot more information (heures pleines et creuses, coule
 
 ### Get one
 <a href="https://www.tindie.com/products/sitronlabs/mysensors-nrf24-linky-module/?ref=offsite_badges&utm_source=sellers_sitronlabs&utm_medium=badges&utm_campaign=badge_small"><img src="https://d2ss6ovg47m0r5.cloudfront.net/badges/tindie-smalls.png" alt="I sell on Tindie" width="200" height="55"></a>
+
+### Upgrade the firmware
+
+This firmware requires PlatfomIO. It works as an add-on to Visual Studio Code editor. To install it, follow the instructions [here](https://platformio.org/install/ide?install=vscode).
+
+Retrieve a copy of the firmware code. If git is something you are familiar with or you would like to contribute, that's the recommanded way. Otherwise, simply download and extract the [zip archive](https://github.com/sitronlabs/MySensors-nRF24-Linky-Modue/archive/refs/heads/master.zip) of the latest code.
+
+Open Visual Sutdio Code, select "File / Open Folder" and navigate to the copy of the firmware code you have just downloaded.
+
+In the left bar click on the PlatformIO icon, then on "Project Tasks / General / Build".
+
+The first compilation might take some time as PlatformIO will download all the neccessary libraries, compilers and tools.
+
+Once it compiles sucessfully, you are ready to upload that firmware to your Linky module.
+
+Connect your Linky module to your computer using a USB cable.
+
+Still in the left bar click on "Project Tasks / General / Upload".
+
+That's it.
