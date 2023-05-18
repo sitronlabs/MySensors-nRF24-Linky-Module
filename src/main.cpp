@@ -14,7 +14,6 @@
 
 /* Working variables */
 static linky_tic m_linky;
-static char m_linky_serial[12 + 1] = "";
 
 /* Wireless messages */
 static MyMessage m_message_info_serial(0, V_TEXT);
@@ -76,13 +75,16 @@ void setup() {
  * MySensors function called to describe this sensor and its capabilites.
  */
 void presentation() {
-    sendSketchInfo("SLHA00011 Linky", "0.1.0");
-    present(0, S_INFO, "Numéro de Série");       // V_TEXT (ADCO, ADSC)
-    present(1, S_POWER, "Index Base");           // V_KWH (BASE)
-    present(2, S_POWER, "Puissance Apparente");  // V_WATT (PAPP)
-    present(3, S_MULTIMETER, "Phase 1");         // V_VOLTAGE (URMS1) and V_CURRENT (IINST, IINST1, IRMS1)
-    present(4, S_MULTIMETER, "Phase 2");         // V_VOLTAGE (URMS2) and V_CURRENT (IINST2, IRMS2)
-    present(5, S_MULTIMETER, "Phase 3");         // V_VOLTAGE (URMS3) and V_CURRENT (IINST3, IRMS3)
+    int res = 1;
+    do {
+        res &= sendSketchInfo("SLHA00011 Linky", "0.1.0");
+        res &= present(0, S_INFO, "Numéro de Série");       // V_TEXT (ADCO, ADSC)
+        res &= present(1, S_POWER, "Index Base");           // V_KWH (BASE)
+        res &= present(2, S_POWER, "Puissance Apparente");  // V_WATT (PAPP)
+        res &= present(3, S_MULTIMETER, "Phase 1");         // V_VOLTAGE (URMS1) and V_CURRENT (IINST, IINST1, IRMS1)
+        res &= present(4, S_MULTIMETER, "Phase 2");         // V_VOLTAGE (URMS2) and V_CURRENT (IINST2, IRMS2)
+        res &= present(5, S_MULTIMETER, "Phase 3");         // V_VOLTAGE (URMS3) and V_CURRENT (IINST3, IRMS3)
+    } while (res == 0);
 }
 
 /**
@@ -172,14 +174,19 @@ void loop() {
 
         /* Serial number */
         if (strcmp(dataset.name, "ADCO") == 0 || strcmp(dataset.name, "ADSC") == 0) {
-            if (strlen(m_linky_serial) == 0) {
-                strncpy(m_linky_serial, dataset.data, 12);
-                send(m_message_info_serial.set(m_linky_serial));
+            static bool initial_sent = false;
+            if (initial_sent == false) {
+                char linky_serial[12 + 1] = "";
+                strncpy(linky_serial, dataset.data, 12);
+                if (send(m_message_info_serial.set(linky_serial)) == true) {
+                    initial_sent = true;
+                }
             }
         }
 
         /* Index for base */
         else if (strcmp(dataset.name, "BASE") == 0) {
+            static bool initial_sent = false;
             static uint32_t base_wh_last = 0;
             uint32_t base_wh = 0;
             for (size_t i = 0; i < 9; i++) {
@@ -190,14 +197,17 @@ void loop() {
                     break;
                 }
             }
-            if (base_wh > base_wh_last) {
-                send(m_message_power_kwh.set(base_wh / 1000.0, 3));
-                base_wh_last = base_wh;
+            if (base_wh > base_wh_last || initial_sent == false) {
+                if (send(m_message_power_kwh.set(base_wh / 1000.0, 3)) == true) {
+                    initial_sent = true;
+                    base_wh_last = base_wh;
+                }
             }
         }
 
         /* Puissance apparente */
         else if (strcmp(dataset.name, "PAPP") == 0) {
+            static bool initial_sent = false;
             static uint32_t power_va_last = 0;
             uint32_t power_va = 0;
             for (size_t i = 0; i < 5; i++) {
@@ -208,14 +218,17 @@ void loop() {
                     break;
                 }
             }
-            if (power_va != power_va_last) {
-                send(m_message_power_watt.set(power_va));
-                power_va_last = power_va;
+            if (power_va != power_va_last || initial_sent == false) {
+                if (send(m_message_power_watt.set(power_va)) == true) {
+                    initial_sent = true;
+                    power_va_last = power_va;
+                }
             }
         }
 
         /* Intensité Phase 1 */
         else if (strcmp(dataset.name, "IINST") == 0 || strcmp(dataset.name, "IINST1") == 0 || strcmp(dataset.name, "IRMS1") == 0) {
+            static bool initial_sent = false;
             static uint32_t current_a_last = 0;
             uint32_t current_a = 0;
             for (size_t i = 0; i < 3; i++) {
@@ -226,14 +239,17 @@ void loop() {
                     break;
                 }
             }
-            if (current_a != current_a_last) {
-                send(m_message_phase1_current.set(current_a));
-                current_a_last = current_a;
+            if (current_a != current_a_last || initial_sent == false) {
+                if (send(m_message_phase1_current.set(current_a)) == true) {
+                    initial_sent = true;
+                    current_a_last = current_a;
+                }
             }
         }
 
         /* Tension Phase 1 */
         else if (strcmp(dataset.name, "URMS1") == 0) {
+            static bool initial_sent = false;
             static uint16_t voltage_v_last = 0;
             uint16_t voltage_a = 0;
             for (size_t i = 0; i < 3; i++) {
@@ -244,14 +260,17 @@ void loop() {
                     break;
                 }
             }
-            if (voltage_a != voltage_v_last) {
-                send(m_message_phase1_voltage.set(voltage_a));
-                voltage_v_last = voltage_a;
+            if (voltage_a != voltage_v_last || initial_sent == false) {
+                if (send(m_message_phase1_voltage.set(voltage_a)) == true) {
+                    initial_sent = true;
+                    voltage_v_last = voltage_a;
+                }
             }
         }
 
         /* Intensité Phase 2 */
         else if (strcmp(dataset.name, "IINST2") == 0 || strcmp(dataset.name, "IRMS2") == 0) {
+            static bool initial_sent = false;
             static uint32_t current_a_last = 0;
             uint32_t current_a = 0;
             for (size_t i = 0; i < 3; i++) {
@@ -262,14 +281,17 @@ void loop() {
                     break;
                 }
             }
-            if (current_a != current_a_last) {
-                send(m_message_phase2_current.set(current_a));
-                current_a_last = current_a;
+            if (current_a != current_a_last || initial_sent == false) {
+                if (send(m_message_phase2_current.set(current_a)) == true) {
+                    initial_sent = true;
+                    current_a_last = current_a;
+                }
             }
         }
 
         /* Tension Phase 2 */
         else if (strcmp(dataset.name, "URMS2") == 0) {
+            static bool initial_sent = false;
             static uint16_t voltage_v_last = 0;
             uint16_t voltage_a = 0;
             for (size_t i = 0; i < 3; i++) {
@@ -280,14 +302,17 @@ void loop() {
                     break;
                 }
             }
-            if (voltage_a != voltage_v_last) {
-                send(m_message_phase2_voltage.set(voltage_a));
-                voltage_v_last = voltage_a;
+            if (voltage_a != voltage_v_last || initial_sent == false) {
+                if (send(m_message_phase2_voltage.set(voltage_a)) == true) {
+                    initial_sent = true;
+                    voltage_v_last = voltage_a;
+                }
             }
         }
 
         /* Intensité Phase 3 */
         else if (strcmp(dataset.name, "IINST3") == 0 || strcmp(dataset.name, "IRMS3") == 0) {
+            static bool initial_sent = false;
             static uint32_t current_a_last = 0;
             uint32_t current_a = 0;
             for (size_t i = 0; i < 3; i++) {
@@ -298,14 +323,17 @@ void loop() {
                     break;
                 }
             }
-            if (current_a != current_a_last) {
-                send(m_message_phase3_current.set(current_a));
-                current_a_last = current_a;
+            if (current_a != current_a_last || initial_sent == false) {
+                if (send(m_message_phase3_current.set(current_a)) == true) {
+                    initial_sent = true;
+                    current_a_last = current_a;
+                }
             }
         }
 
         /* Tension Phase 3 */
         else if (strcmp(dataset.name, "URMS3") == 0) {
+            static bool initial_sent = false;
             static uint16_t voltage_v_last = 0;
             uint16_t voltage_a = 0;
             for (size_t i = 0; i < 3; i++) {
@@ -316,9 +344,11 @@ void loop() {
                     break;
                 }
             }
-            if (voltage_a != voltage_v_last) {
-                send(m_message_phase3_voltage.set(voltage_a));
-                voltage_v_last = voltage_a;
+            if (voltage_a != voltage_v_last || initial_sent == false) {
+                if (send(m_message_phase3_voltage.set(voltage_a)) == true) {
+                    initial_sent = true;
+                    voltage_v_last = voltage_a;
+                }
             }
         }
     }
