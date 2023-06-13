@@ -9,7 +9,6 @@
 #define MY_RF24_PA_LEVEL RF24_PA_HIGH
 #define MY_DEFAULT_ERR_LED_PIN A0
 #define MY_DEFAULT_TX_LED_PIN A1
-#define MY_REPEATER_FEATURE
 
 /* Linky configuration */
 #define CONFIG_LINKY_DATA_PIN 2
