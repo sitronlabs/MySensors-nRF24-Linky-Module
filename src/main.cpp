@@ -77,7 +77,7 @@ void setup() {
 void presentation() {
     int res = 1;
     do {
-        res &= sendSketchInfo("SLHA00011 Linky", "0.1.0");
+        res &= sendSketchInfo("SLHA00011 Linky", "0.1.1");
         res &= present(0, S_INFO, "Numéro de Série");       // V_TEXT (ADCO, ADSC)
         res &= present(1, S_POWER, "Index Base");           // V_KWH (BASE)
         res &= present(2, S_POWER, "Puissance Apparente");  // V_WATT (PAPP)
