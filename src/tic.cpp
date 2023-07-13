@@ -1,10 +1,10 @@
 /* Self header */
-#include "linky_tic.h"
+#include "tic.h"
 
 /**
  *
  */
-int linky_tic::setup(const int pin_data_in, const int pin_data_out) {
+int tic::setup(const int pin_data_in, const int pin_data_out) {
     if (m_port == NULL) {
         m_port = new SoftwareSerial(pin_data_in, pin_data_out);
         if (m_port == NULL) {
@@ -18,7 +18,7 @@ int linky_tic::setup(const int pin_data_in, const int pin_data_out) {
 /**
  *
  */
-int linky_tic::begin(const int baudrate) {
+int tic::begin(const int baudrate) {
 
     /* Ensure setup has been performed */
     if (m_port == NULL) {
@@ -66,7 +66,7 @@ int linky_tic::begin(const int baudrate) {
  *
  * @return 1 if a valid dataset is available, 0 if no dataset is available, or a negative error code otherwise
  */
-int linky_tic::dataset_get(struct dataset &dataset) {
+int tic::dataset_get(struct dataset &dataset) {
 
     /* Ensure setup has been performed */
     if (m_port == NULL) {

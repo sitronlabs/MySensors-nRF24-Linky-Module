@@ -1,5 +1,5 @@
-#ifndef LINKY_TIC_H
-#define LINKY_TIC_H
+#ifndef TIC_H
+#define TIC_H
 
 /* Arduino libraries */
 #include <Arduino.h>
@@ -9,7 +9,7 @@
 /* C/C++ libraries */
 #include <errno.h>
 
-class linky_tic {
+class tic {
    public:
     struct dataset {
         char name[8 + 1];

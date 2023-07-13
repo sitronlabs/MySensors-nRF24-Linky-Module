@@ -2,7 +2,7 @@
 #include "../cfg/config.h"
 
 /* Project code */
-#include "linky_tic.h"
+#include "tic.h"
 
 /* Arduino Libraries */
 #include <Arduino.h>
@@ -13,7 +13,7 @@
 #include <stdlib.h>
 
 /* Working variables */
-static linky_tic m_linky;
+static tic m_tic;
 
 /* Wireless messages */
 static MyMessage m_message_info_serial(0, V_TEXT);
@@ -30,18 +30,18 @@ static MyMessage m_message_phase3_current(5, V_CURRENT);
  * Setup function.
  * Called before MySensors does anything.
  */
-void preHwInit() {
+void preHwInit(void) {
 
     /* Setup leds
      * Ensures tic link led is off at startup */
-    pinMode(CONFIG_LED_LINKY_GREEN_PIN, OUTPUT);
-    pinMode(CONFIG_LED_LINKY_RED_PIN, OUTPUT);
-    digitalWrite(CONFIG_LED_LINKY_GREEN_PIN, LOW);
-    digitalWrite(CONFIG_LED_LINKY_RED_PIN, LOW);
+    pinMode(CONFIG_LED_TIC_GREEN_PIN, OUTPUT);
+    pinMode(CONFIG_LED_TIC_RED_PIN, OUTPUT);
+    digitalWrite(CONFIG_LED_TIC_GREEN_PIN, LOW);
+    digitalWrite(CONFIG_LED_TIC_RED_PIN, LOW);
 }
 
 /**
- *
+ * Called when setup() encounters an error.
  */
 void setup_failed(const char *const reason) {
     Serial.println(reason);
@@ -55,17 +55,17 @@ void setup_failed(const char *const reason) {
  * Setup function.
  * Called once MySensors has successfully initialized.
  */
-void setup() {
+void setup(void) {
     int res;
 
     /* Setup serial */
     Serial.begin(115200);
     Serial.println(" [i] Hello world.");
 
-    /* Setup linky */
+    /* Setup tic */
     res = 0;
-    res |= m_linky.setup(CONFIG_LINKY_DATA_PIN, CONFIG_LINKY_DUMMY_PIN);
-    res |= m_linky.begin();
+    res |= m_tic.setup(CONFIG_TIC_DATA_PIN, CONFIG_TIC_DUMMY_PIN);
+    res |= m_tic.begin();
     if (res < 0) {
         setup_failed(" [e] Failed to communicate with linky!");
     }
@@ -74,10 +74,10 @@ void setup() {
 /**
  * MySensors function called to describe this sensor and its capabilites.
  */
-void presentation() {
+void presentation(void) {
     int res = 1;
     do {
-        res &= sendSketchInfo("SLHA00011 Linky", "0.1.1");
+        res &= sendSketchInfo("SLHA00011 Tic", "0.1.1");
         res &= present(0, S_INFO, "Numéro de Série");       // V_TEXT (ADCO, ADSC)
         res &= present(1, S_POWER, "Index Base");           // V_KWH (BASE)
         res &= present(2, S_POWER, "Puissance Apparente");  // V_WATT (PAPP)
@@ -91,16 +91,19 @@ void presentation() {
  * MySensors function called when a message is received.
  */
 void receive(const MyMessage &message) {
+
+    /* For now we ignore the received message */
+    (void)message;
 }
 
 /**
  * Main loop.
  */
-void loop() {
+void loop(void) {
     int res;
 
     /* Led task */
-    static bool linky_valid = false;
+    static bool tic_valid = false;
     static uint32_t m_led_timestamp = 0;
     static enum {
         STATE_0,
@@ -113,7 +116,7 @@ void loop() {
     } m_led_sm;
     switch (m_led_sm) {
         case STATE_0: {
-            if (linky_valid) {
+            if (tic_valid) {
                 m_led_sm = STATE_1;
             } else {
                 m_led_sm = STATE_4;
@@ -121,15 +124,15 @@ void loop() {
             break;
         }
         case STATE_1: {
-            digitalWrite(CONFIG_LED_LINKY_RED_PIN, LOW);
-            digitalWrite(CONFIG_LED_LINKY_GREEN_PIN, HIGH);
+            digitalWrite(CONFIG_LED_TIC_RED_PIN, LOW);
+            digitalWrite(CONFIG_LED_TIC_GREEN_PIN, HIGH);
             m_led_timestamp = millis();
             m_led_sm = STATE_2;
             break;
         }
         case STATE_2: {
             if (millis() - m_led_timestamp >= 100) {
-                digitalWrite(CONFIG_LED_LINKY_GREEN_PIN, LOW);
+                digitalWrite(CONFIG_LED_TIC_GREEN_PIN, LOW);
                 m_led_sm = STATE_3;
             }
             break;
@@ -141,15 +144,15 @@ void loop() {
             break;
         }
         case STATE_4: {
-            digitalWrite(CONFIG_LED_LINKY_GREEN_PIN, LOW);
-            digitalWrite(CONFIG_LED_LINKY_RED_PIN, HIGH);
+            digitalWrite(CONFIG_LED_TIC_GREEN_PIN, LOW);
+            digitalWrite(CONFIG_LED_TIC_RED_PIN, HIGH);
             m_led_timestamp = millis();
             m_led_sm = STATE_5;
             break;
         }
         case STATE_5: {
             if (millis() - m_led_timestamp >= 100) {
-                digitalWrite(CONFIG_LED_LINKY_RED_PIN, LOW);
+                digitalWrite(CONFIG_LED_TIC_RED_PIN, LOW);
                 m_led_sm = STATE_6;
             }
             break;
@@ -162,23 +165,23 @@ void loop() {
         }
     }
 
-    /* Linky task */
-    struct linky_tic::dataset dataset = {0};
-    res = m_linky.dataset_get(dataset);
+    /* Tic task */
+    struct tic::dataset dataset = {0};
+    res = m_tic.dataset_get(dataset);
     if (res < 0) {
-        Serial.println(" [e] Linky error!");
-        linky_valid = false;
+        Serial.println(" [e] Tic error!");
+        tic_valid = false;
     } else if (res == 1) {
         Serial.printf(" [d] Received dataset %s = %s\r\n", dataset.name, dataset.data);
-        linky_valid = true;
+        tic_valid = true;
 
         /* Serial number */
         if (strcmp(dataset.name, "ADCO") == 0 || strcmp(dataset.name, "ADSC") == 0) {
             static bool initial_sent = false;
             if (initial_sent == false) {
-                char linky_serial[12 + 1] = "";
-                strncpy(linky_serial, dataset.data, 12);
-                if (send(m_message_info_serial.set(linky_serial)) == true) {
+                char tic_serial[12 + 1] = "";
+                strncpy(tic_serial, dataset.data, 12);
+                if (send(m_message_info_serial.set(tic_serial)) == true) {
                     initial_sent = true;
                 }
             }

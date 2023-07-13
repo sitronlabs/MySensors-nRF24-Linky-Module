@@ -10,12 +10,12 @@
 #define MY_DEFAULT_ERR_LED_PIN A0
 #define MY_DEFAULT_TX_LED_PIN A1
 
-/* Linky configuration */
-#define CONFIG_LINKY_DATA_PIN 2
-#define CONFIG_LINKY_DUMMY_PIN 5
+/* Tic configuration */
+#define CONFIG_TIC_DATA_PIN 2
+#define CONFIG_TIC_DUMMY_PIN 5
 
 /* Leds configuration */
-#define CONFIG_LED_LINKY_GREEN_PIN 4
-#define CONFIG_LED_LINKY_RED_PIN 3
+#define CONFIG_LED_TIC_GREEN_PIN 4
+#define CONFIG_LED_TIC_RED_PIN 3
 
 #endif
