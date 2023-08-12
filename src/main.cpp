@@ -23,6 +23,7 @@ enum {
     SENSOR_3_MULTIMETER_PHASE_1,  // V_VOLTAGE and V_CURRENT
     SENSOR_4_MULTIMETER_PHASE_2,  // V_VOLTAGE and V_CURRENT
     SENSOR_5_MULTIMETER_PHASE_3,  // V_VOLTAGE and V_CURRENT
+    SENSOR_6_PRICING,             // V_TEXT
 };
 
 /**
@@ -83,6 +84,7 @@ void presentation(void) {
         res &= present(SENSOR_3_MULTIMETER_PHASE_1, S_MULTIMETER, F("Phase 1"));     // V_VOLTAGE (URMS1) and V_CURRENT (IINST, IINST1, IRMS1)
         res &= present(SENSOR_4_MULTIMETER_PHASE_2, S_MULTIMETER, F("Phase 2"));     // V_VOLTAGE (URMS2) and V_CURRENT (IINST2, IRMS2)
         res &= present(SENSOR_5_MULTIMETER_PHASE_3, S_MULTIMETER, F("Phase 3"));     // V_VOLTAGE (URMS3) and V_CURRENT (IINST3, IRMS3)
+        res &= present(SENSOR_6_PRICING, S_INFO, F("Option tarifaire"));             // V_TEXT
     } while (res == 0);
 }
 
@@ -181,6 +183,19 @@ void loop(void) {
                 MyMessage message(SENSOR_0_SERIAL_NUMBER, V_TEXT);
                 if (send(message.set(dataset.data)) == true) {
                     initial_sent = true;
+                }
+            }
+        }
+
+        /* Option tarifaire choisie */
+        else if (strcmp_P(dataset.name, PSTR("OPTARIF")) == 0) {
+            static bool initial_sent = false;
+            static char value_last[4 + 1];
+            if (strcmp(dataset.data, value_last) != 0 || initial_sent == false) {
+                MyMessage message(SENSOR_6_PRICING, V_TEXT);
+                if (send(message.set(dataset.data)) == true) {
+                    initial_sent = true;
+                    strncpy(value_last, dataset.data, 4);
                 }
             }
         }
