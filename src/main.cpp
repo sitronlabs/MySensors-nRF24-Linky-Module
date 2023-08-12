@@ -78,7 +78,7 @@ void setup(void) {
 void presentation(void) {
     int res = 1;
     do {
-        res &= sendSketchInfo(F("SLHA00011 Linky"), F("0.1.1"));
+        res &= sendSketchInfo(F("SLHA00011 Linky"), F("0.2.0"));
         res &= present(SENSOR_0_SERIAL_NUMBER, S_INFO, F("Numéro de Série"));                      // V_TEXT (ADCO, ADSC)
         res &= present(SENSOR_1_INDEX_BASE, S_POWER, F("Index Base"));                             // V_KWH (BASE)
         res &= present(SENSOR_2_POWER_APPARENT, S_POWER, F("Puissance Apparente"));                // V_WATT (PAPP)
