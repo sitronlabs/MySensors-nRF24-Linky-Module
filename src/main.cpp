@@ -284,160 +284,96 @@ void loop(void) {
 
                 /* Index for base */
                 else if (strcmp_P(dataset.name, PSTR("BASE")) == 0) {
-                    static uint32_t base_wh_last = 0;
-                    uint32_t base_wh = 0;
-                    for (size_t i = 0; i < 9; i++) {
-                        if (dataset.data[i] >= '0' && dataset.data[i] <= '9') {
-                            base_wh *= 10;
-                            base_wh += dataset.data[i] - '0';
-                        } else {
-                            break;
-                        }
-                    }
-                    if (base_wh > base_wh_last) {
+                    static uint32_t value_last = 0;
+                    uint32_t value = strtol(dataset.data, NULL, 10);
+                    if (value > value_last) {
                         MyMessage message(SENSOR_1_INDEX_BASE, V_KWH);
-                        if (send(message.set(base_wh / 1000.0, 3)) == true) {
-                            base_wh_last = base_wh;
+                        if (send(message.set(value / 1000.0, 3)) == true) {
+                            value_last = value;
                         }
                     }
                 }
 
                 /* Puissance apparente */
                 else if (strcmp_P(dataset.name, PSTR("PAPP")) == 0) {
-                    static uint32_t power_va_last = 0;
-                    uint32_t power_va = 0;
-                    for (size_t i = 0; i < 5; i++) {
-                        if (dataset.data[i] >= '0' && dataset.data[i] <= '9') {
-                            power_va *= 10;
-                            power_va += dataset.data[i] - '0';
-                        } else {
-                            break;
-                        }
-                    }
-                    if (power_va != power_va_last) {
+                    static uint32_t value_last = 0;
+                    uint32_t value = strtol(dataset.data, NULL, 10);
+                    if (value != value_last) {
                         MyMessage message(SENSOR_2_POWER_APPARENT, V_WATT);
-                        if (send(message.set(power_va)) == true) {
-                            power_va_last = power_va;
+                        if (send(message.set(value)) == true) {
+                            value_last = value;
                         }
                     }
                 }
 
                 /* Intensité Phase 1 */
                 else if (strcmp_P(dataset.name, PSTR("IINST")) == 0 || strcmp_P(dataset.name, PSTR("IINST1")) == 0 || strcmp_P(dataset.name, PSTR("IRMS1")) == 0) {
-                    static uint32_t current_a_last = 0;
-                    uint32_t current_a = 0;
-                    for (size_t i = 0; i < 3; i++) {
-                        if (dataset.data[i] >= '0' && dataset.data[i] <= '9') {
-                            current_a *= 10;
-                            current_a += dataset.data[i] - '0';
-                        } else {
-                            break;
-                        }
-                    }
-                    if (current_a != current_a_last) {
+                    static uint8_t value_last = 0;
+                    uint8_t value = strtol(dataset.data, NULL, 10);
+                    if (value != value_last) {
                         MyMessage message(SENSOR_3_MULTIMETER_PHASE_1, V_CURRENT);
-                        if (send(message.set(current_a)) == true) {
-                            current_a_last = current_a;
+                        if (send(message.set(value)) == true) {
+                            value_last = value;
                         }
                     }
                 }
 
                 /* Tension Phase 1 */
                 else if (strcmp_P(dataset.name, PSTR("URMS1")) == 0) {
-                    static uint16_t voltage_v_last = 0;
-                    uint16_t voltage_a = 0;
-                    for (size_t i = 0; i < 3; i++) {
-                        if (dataset.data[i] >= '0' && dataset.data[i] <= '9') {
-                            voltage_a *= 10;
-                            voltage_a += dataset.data[i] - '0';
-                        } else {
-                            break;
-                        }
-                    }
-                    if (voltage_a != voltage_v_last) {
+                    static uint16_t value_last = 0;
+                    uint16_t value = strtol(dataset.data, NULL, 10);
+                    if (value != value_last) {
                         MyMessage message(SENSOR_3_MULTIMETER_PHASE_1, V_VOLTAGE);
-                        if (send(message.set(voltage_a)) == true) {
-                            voltage_v_last = voltage_a;
+                        if (send(message.set(value)) == true) {
+                            value_last = value;
                         }
                     }
                 }
 
                 /* Intensité Phase 2 */
                 else if (strcmp_P(dataset.name, PSTR("IINST2")) == 0 || strcmp_P(dataset.name, PSTR("IRMS2")) == 0) {
-                    static uint32_t current_a_last = 0;
-                    uint32_t current_a = 0;
-                    for (size_t i = 0; i < 3; i++) {
-                        if (dataset.data[i] >= '0' && dataset.data[i] <= '9') {
-                            current_a *= 10;
-                            current_a += dataset.data[i] - '0';
-                        } else {
-                            break;
-                        }
-                    }
-                    if (current_a != current_a_last) {
+                    static uint8_t value_last = 0;
+                    uint8_t value = strtol(dataset.data, NULL, 10);
+                    if (value != value_last) {
                         MyMessage message(SENSOR_4_MULTIMETER_PHASE_2, V_CURRENT);
-                        if (send(message.set(current_a)) == true) {
-                            current_a_last = current_a;
+                        if (send(message.set(value)) == true) {
+                            value_last = value;
                         }
                     }
                 }
 
                 /* Tension Phase 2 */
                 else if (strcmp_P(dataset.name, PSTR("URMS2")) == 0) {
-                    static uint16_t voltage_v_last = 0;
-                    uint16_t voltage_a = 0;
-                    for (size_t i = 0; i < 3; i++) {
-                        if (dataset.data[i] >= '0' && dataset.data[i] <= '9') {
-                            voltage_a *= 10;
-                            voltage_a += dataset.data[i] - '0';
-                        } else {
-                            break;
-                        }
-                    }
-                    if (voltage_a != voltage_v_last) {
+                    static uint16_t value_last = 0;
+                    uint16_t value = strtol(dataset.data, NULL, 10);
+                    if (value != value_last) {
                         MyMessage message(SENSOR_4_MULTIMETER_PHASE_2, V_VOLTAGE);
-                        if (send(message.set(voltage_a)) == true) {
-                            voltage_v_last = voltage_a;
+                        if (send(message.set(value)) == true) {
+                            value_last = value;
                         }
                     }
                 }
 
                 /* Intensité Phase 3 */
                 else if (strcmp_P(dataset.name, PSTR("IINST3")) == 0 || strcmp_P(dataset.name, PSTR("IRMS3")) == 0) {
-                    static uint32_t current_a_last = 0;
-                    uint32_t current_a = 0;
-                    for (size_t i = 0; i < 3; i++) {
-                        if (dataset.data[i] >= '0' && dataset.data[i] <= '9') {
-                            current_a *= 10;
-                            current_a += dataset.data[i] - '0';
-                        } else {
-                            break;
-                        }
-                    }
-                    if (current_a != current_a_last) {
+                    static uint8_t value_last = 0;
+                    uint8_t value = strtol(dataset.data, NULL, 10);
+                    if (value != value_last) {
                         MyMessage message(SENSOR_5_MULTIMETER_PHASE_3, V_CURRENT);
-                        if (send(message.set(current_a)) == true) {
-                            current_a_last = current_a;
+                        if (send(message.set(value)) == true) {
+                            value_last = value;
                         }
                     }
                 }
 
                 /* Tension Phase 3 */
                 else if (strcmp_P(dataset.name, PSTR("URMS3")) == 0) {
-                    static uint16_t voltage_v_last = 0;
-                    uint16_t voltage_a = 0;
-                    for (size_t i = 0; i < 3; i++) {
-                        if (dataset.data[i] >= '0' && dataset.data[i] <= '9') {
-                            voltage_a *= 10;
-                            voltage_a += dataset.data[i] - '0';
-                        } else {
-                            break;
-                        }
-                    }
-                    if (voltage_a != voltage_v_last) {
+                    static uint16_t value_last = 0;
+                    uint16_t value = strtol(dataset.data, NULL, 10);
+                    if (value != value_last) {
                         MyMessage message(SENSOR_5_MULTIMETER_PHASE_3, V_VOLTAGE);
-                        if (send(message.set(voltage_a)) == true) {
-                            voltage_v_last = voltage_a;
+                        if (send(message.set(value)) == true) {
+                            value_last = value;
                         }
                     }
                 }
