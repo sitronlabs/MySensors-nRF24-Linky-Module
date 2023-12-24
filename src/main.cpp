@@ -72,12 +72,16 @@ void setup(void) {
 
     /* Setup tic reader */
     m_tic_reader.setup(m_tic_port);
+
+    /* Return */
+    Serial.println(" [i] Setup done.");
 }
 
 /**
  * MySensors function called to describe this sensor and its capabilites.
  */
 void presentation(void) {
+
     /* Because messages might be lost,
      * we're not doing the presentation in one block, but rather step by step,
      * making sure each step is sucessful before advancing to the next */
@@ -141,79 +145,79 @@ void presentation(void) {
                 break;
             }
             case SENSOR_8_CONTRACT_BASE_INDEX: {
-                if (present(SENSOR_8_CONTRACT_BASE_INDEX, S_POWER, F("Opt Base Index")) == true) {  // V_KWH (BASE)
+                if (present(SENSOR_8_CONTRACT_BASE_INDEX, S_POWER, F("Index Base")) == true) {  // V_KWH (BASE)
                     step++;
                 }
                 break;
             }
             case SENSOR_9_CONTRACT_HC_INDEX_HC: {
-                if (present(SENSOR_9_CONTRACT_HC_INDEX_HC, S_POWER, F("Opt HC Index HC")) == true) {  // V_KWH (HCHC)
+                if (present(SENSOR_9_CONTRACT_HC_INDEX_HC, S_POWER, F("Index HC")) == true) {  // V_KWH (HCHC)
                     step++;
                 }
                 break;
             }
             case SENSOR_10_CONTRACT_HC_INDEX_HP: {
-                if (present(SENSOR_10_CONTRACT_HC_INDEX_HP, S_POWER, F("Opt HC Index HP")) == true) {  // V_KWH (HCHP)
+                if (present(SENSOR_10_CONTRACT_HC_INDEX_HP, S_POWER, F("Index HP")) == true) {  // V_KWH (HCHP)
                     step++;
                 }
                 break;
             }
             case SENSOR_11_CONTRACT_EJP_INDEX_HN: {
-                if (present(SENSOR_11_CONTRACT_EJP_INDEX_HN, S_POWER, F("Opt EJP Index HN")) == true) {  // V_KWH (EJPHN)
+                if (present(SENSOR_11_CONTRACT_EJP_INDEX_HN, S_POWER, F("Index HN")) == true) {  // V_KWH (EJPHN)
                     step++;
                 }
                 break;
             }
             case SENSOR_12_CONTRACT_EJP_INDEX_HPM: {
-                if (present(SENSOR_12_CONTRACT_EJP_INDEX_HPM, S_POWER, F("Opt EJP Index HPM")) == true) {  // V_KWH (EJPHPM)
+                if (present(SENSOR_12_CONTRACT_EJP_INDEX_HPM, S_POWER, F("Index HPM")) == true) {  // V_KWH (EJPHPM)
                     step++;
                 }
                 break;
             }
             case SENSOR_13_CONTRACT_EJP_NOTICE: {
-                if (present(SENSOR_13_CONTRACT_EJP_NOTICE, S_INFO, F("Opt EJP Préavis")) == true) {  // V_TEXT (PEJP)
+                if (present(SENSOR_13_CONTRACT_EJP_NOTICE, S_INFO, F("Préavis EJP")) == true) {  // V_TEXT (PEJP)
                     step++;
                 }
                 break;
             }
             case SENSOR_15_CONTRACT_TEMPO_INDEX_BLUE_OK: {
-                if (present(SENSOR_15_CONTRACT_TEMPO_INDEX_BLUE_OK, S_POWER, F("Opt Tempo Index Bleu HC")) == true) {  // V_KWH (BBRHCJB)
+                if (present(SENSOR_15_CONTRACT_TEMPO_INDEX_BLUE_OK, S_POWER, F("Index Bleu HC")) == true) {  // V_KWH (BBRHCJB)
                     step++;
                 }
                 break;
             }
             case SENSOR_14_CONTRACT_TEMPO_INDEX_BLUE_PK: {
-                if (present(SENSOR_14_CONTRACT_TEMPO_INDEX_BLUE_PK, S_POWER, F("Opt Tempo Index Bleu HP")) == true) {  // V_KWH (BBRHPJB)
+                if (present(SENSOR_14_CONTRACT_TEMPO_INDEX_BLUE_PK, S_POWER, F("Index Bleu HP")) == true) {  // V_KWH (BBRHPJB)
                     step++;
                 }
                 break;
             }
             case SENSOR_17_CONTRACT_TEMPO_INDEX_WHITE_OK: {
-                if (present(SENSOR_17_CONTRACT_TEMPO_INDEX_WHITE_OK, S_POWER, F("Opt Tempo Index Blanc HC")) == true) {  // V_KWH (BBRHCJW)
+                if (present(SENSOR_17_CONTRACT_TEMPO_INDEX_WHITE_OK, S_POWER, F("Index Blanc HC")) == true) {  // V_KWH (BBRHCJW)
                     step++;
                 }
                 break;
             }
             case SENSOR_16_CONTRACT_TEMPO_INDEX_WHITE_PK: {
-                if (present(SENSOR_16_CONTRACT_TEMPO_INDEX_WHITE_PK, S_POWER, F("Opt Tempo Index Blanc HP")) == true) {  // V_KWH (BBRHPJW)
+                if (present(SENSOR_16_CONTRACT_TEMPO_INDEX_WHITE_PK, S_POWER, F("Index Blanc HP")) == true) {  // V_KWH (BBRHPJW)
                     step++;
                 }
                 break;
             }
             case SENSOR_19_CONTRACT_TEMPO_INDEX_RED_OK: {
-                if (present(SENSOR_19_CONTRACT_TEMPO_INDEX_RED_OK, S_POWER, F("Opt Tempo Index Rouge HC")) == true) {  // V_KWH (BBRHCJR)
+                if (present(SENSOR_19_CONTRACT_TEMPO_INDEX_RED_OK, S_POWER, F("Index Rouge HC")) == true) {  // V_KWH (BBRHCJR)
                     step++;
                 }
                 break;
             }
             case SENSOR_18_CONTRACT_TEMPO_INDEX_RED_PK: {
-                if (present(SENSOR_18_CONTRACT_TEMPO_INDEX_RED_PK, S_POWER, F("Opt Tempo Index Rouge HP")) == true) {  // V_KWH (BBRHPJR)
+                if (present(SENSOR_18_CONTRACT_TEMPO_INDEX_RED_PK, S_POWER, F("Index Rouge HP")) == true) {  // V_KWH (BBRHPJR)
                     step++;
                 }
                 break;
             }
             case SENSOR_20_CONTRACT_TEMPO_TOMORROW: {
-                if (present(SENSOR_20_CONTRACT_TEMPO_TOMORROW, S_INFO, F("Opt Tempo Couleur Demain")) == true) {  // V_TEXT (DEMAIN)
+                if (present(SENSOR_20_CONTRACT_TEMPO_TOMORROW, S_INFO, F("Couleur Demain")) == true) {  // V_TEXT (DEMAIN)
                     step++;
                 }
                 break;
@@ -688,6 +692,11 @@ void loop(void) {
                     }
                 }
 
+                break;
+            }
+
+            default: {
+                m_tic_sm = STATE_0;
                 break;
             }
         }
