@@ -145,7 +145,7 @@ void presentation(void) {
                 break;
             }
             case SENSOR_8_CONTRACT_BASE_INDEX: {
-                if (present(SENSOR_8_CONTRACT_BASE_INDEX, S_POWER, F("Index Base")) == true) {  // V_KWH (BASE)
+                if (present(SENSOR_8_CONTRACT_BASE_INDEX, S_POWER, F("Index TH")) == true) {  // V_KWH (BASE)
                     step++;
                 }
                 break;
@@ -538,7 +538,7 @@ void loop(void) {
                     }
                 }
 
-                /* Option Base, index */
+                /* Option Base, index TH */
                 else if (strcmp_P(dataset.name, PSTR("BASE")) == 0) {
                     static uint32_t value_last = 0;
                     uint32_t value = strtol(dataset.data, NULL, 10);
