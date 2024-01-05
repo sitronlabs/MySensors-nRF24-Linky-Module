@@ -506,6 +506,12 @@ void loop(void) {
 
                 /* Option tarifaire choisie */
                 else if (strcmp_P(dataset.name, PSTR("OPTARIF")) == 0) {
+                    for (uint8_t i = 0; i < 4; i++) {
+                        if (dataset.data[i] == '.') {
+                            dataset.data[i] = '\0';
+                            break;
+                        }
+                    }
                     static char value_last[4 + 1];
                     if (strcmp(dataset.data, value_last) != 0) {
                         MyMessage message(SENSOR_5_CONTRACT_NAME, V_TEXT);
@@ -529,6 +535,12 @@ void loop(void) {
 
                 /* Période tarifaire en cours */
                 else if (strcmp_P(dataset.name, PSTR("PTEC")) == 0) {
+                    for (uint8_t i = 0; i < 4; i++) {
+                        if (dataset.data[i] == '.') {
+                            dataset.data[i] = '\0';
+                            break;
+                        }
+                    }
                     static char value_last[4 + 1];
                     if (strcmp(dataset.data, value_last) != 0) {
                         MyMessage message(SENSOR_7_CONTRACT_PERIOD, V_TEXT);
