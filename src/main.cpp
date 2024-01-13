@@ -421,7 +421,7 @@ void loop(void) {
                          strcmp_P(dataset.name, PSTR("IINST1")) == 0 ||  //
                          strcmp_P(dataset.name, PSTR("IRMS1")) == 0) {
                     static uint8_t value_last = 0;
-                    uint8_t value = strtol(dataset.data, NULL, 10);
+                    uint8_t value = strtoul(dataset.data, NULL, 10);
                     if (value != value_last) {
                         MyMessage message(SENSOR_1_MULTIMETER_PHASE_1, V_CURRENT);
                         if (send(message.set(value)) == true) {
@@ -433,7 +433,7 @@ void loop(void) {
                 /* Tension Phase 1 */
                 else if (strcmp_P(dataset.name, PSTR("URMS1")) == 0) {
                     static uint16_t value_last = 0;
-                    uint16_t value = strtol(dataset.data, NULL, 10);
+                    uint16_t value = strtoul(dataset.data, NULL, 10);
                     if (value != value_last) {
                         MyMessage message(SENSOR_1_MULTIMETER_PHASE_1, V_VOLTAGE);
                         if (send(message.set(value)) == true) {
@@ -446,7 +446,7 @@ void loop(void) {
                 else if (strcmp_P(dataset.name, PSTR("IINST2")) == 0 ||  //
                          strcmp_P(dataset.name, PSTR("IRMS2")) == 0) {
                     static uint8_t value_last = 0;
-                    uint8_t value = strtol(dataset.data, NULL, 10);
+                    uint8_t value = strtoul(dataset.data, NULL, 10);
                     if (value != value_last) {
                         MyMessage message(SENSOR_2_MULTIMETER_PHASE_2, V_CURRENT);
                         if (send(message.set(value)) == true) {
@@ -458,7 +458,7 @@ void loop(void) {
                 /* Tension Phase 2 */
                 else if (strcmp_P(dataset.name, PSTR("URMS2")) == 0) {
                     static uint16_t value_last = 0;
-                    uint16_t value = strtol(dataset.data, NULL, 10);
+                    uint16_t value = strtoul(dataset.data, NULL, 10);
                     if (value != value_last) {
                         MyMessage message(SENSOR_2_MULTIMETER_PHASE_2, V_VOLTAGE);
                         if (send(message.set(value)) == true) {
@@ -471,7 +471,7 @@ void loop(void) {
                 else if (strcmp_P(dataset.name, PSTR("IINST3")) == 0 ||  //
                          strcmp_P(dataset.name, PSTR("IRMS3")) == 0) {
                     static uint8_t value_last = 0;
-                    uint8_t value = strtol(dataset.data, NULL, 10);
+                    uint8_t value = strtoul(dataset.data, NULL, 10);
                     if (value != value_last) {
                         MyMessage message(SENSOR_3_MULTIMETER_PHASE_3, V_CURRENT);
                         if (send(message.set(value)) == true) {
@@ -483,7 +483,7 @@ void loop(void) {
                 /* Tension Phase 3 */
                 else if (strcmp_P(dataset.name, PSTR("URMS3")) == 0) {
                     static uint16_t value_last = 0;
-                    uint16_t value = strtol(dataset.data, NULL, 10);
+                    uint16_t value = strtoul(dataset.data, NULL, 10);
                     if (value != value_last) {
                         MyMessage message(SENSOR_3_MULTIMETER_PHASE_3, V_VOLTAGE);
                         if (send(message.set(value)) == true) {
@@ -495,7 +495,7 @@ void loop(void) {
                 /* Puissance apparente */
                 else if (strcmp_P(dataset.name, PSTR("PAPP")) == 0) {
                     static uint32_t value_last = 0;
-                    uint32_t value = strtol(dataset.data, NULL, 10);
+                    uint32_t value = strtoul(dataset.data, NULL, 10);
                     if (value != value_last) {
                         MyMessage message(SENSOR_4_POWER_APPARENT, V_WATT);
                         if (send(message.set(value)) == true) {
@@ -524,7 +524,7 @@ void loop(void) {
                 /* Intensité Souscrite */
                 else if (strcmp_P(dataset.name, PSTR("ISOUSC")) == 0) {
                     static uint8_t value_last = 0;
-                    uint8_t value = strtol(dataset.data, NULL, 10);
+                    uint8_t value = strtoul(dataset.data, NULL, 10);
                     if (value != value_last) {
                         MyMessage message(SENSOR_6_CONTRACT_CURRENT, V_CURRENT);
                         if (send(message.set(value)) == true) {
@@ -553,7 +553,7 @@ void loop(void) {
                 /* Option Base, index TH */
                 else if (strcmp_P(dataset.name, PSTR("BASE")) == 0) {
                     static uint32_t value_last = 0;
-                    uint32_t value = strtol(dataset.data, NULL, 10);
+                    uint32_t value = strtoul(dataset.data, NULL, 10);
                     if (value > value_last) {
                         MyMessage message(SENSOR_8_CONTRACT_BASE_INDEX, V_KWH);
                         if (send(message.set(value / 1000.0, 3)) == true) {
@@ -565,7 +565,7 @@ void loop(void) {
                 /* Option HC, index HC */
                 else if (strcmp_P(dataset.name, PSTR("HCHC")) == 0) {
                     static uint32_t value_last = 0;
-                    uint32_t value = strtol(dataset.data, NULL, 10);
+                    uint32_t value = strtoul(dataset.data, NULL, 10);
                     if (value > value_last) {
                         MyMessage message(SENSOR_9_CONTRACT_HC_INDEX_HC, V_KWH);
                         if (send(message.set(value / 1000.0, 3)) == true) {
@@ -577,7 +577,7 @@ void loop(void) {
                 /* Option HC, index HP */
                 else if (strcmp_P(dataset.name, PSTR("HCHP")) == 0) {
                     static uint32_t value_last = 0;
-                    uint32_t value = strtol(dataset.data, NULL, 10);
+                    uint32_t value = strtoul(dataset.data, NULL, 10);
                     if (value > value_last) {
                         MyMessage message(SENSOR_10_CONTRACT_HC_INDEX_HP, V_KWH);
                         if (send(message.set(value / 1000.0, 3)) == true) {
@@ -589,7 +589,7 @@ void loop(void) {
                 /* Option EJP, index heures normales */
                 else if (strcmp_P(dataset.name, PSTR("EJPHN")) == 0) {
                     static uint32_t value_last = 0;
-                    uint32_t value = strtol(dataset.data, NULL, 10);
+                    uint32_t value = strtoul(dataset.data, NULL, 10);
                     if (value > value_last) {
                         MyMessage message(SENSOR_11_CONTRACT_EJP_INDEX_HN, V_KWH);
                         if (send(message.set(value / 1000.0, 3)) == true) {
@@ -601,7 +601,7 @@ void loop(void) {
                 /* Option EJP, index heures de pointe mobile */
                 else if (strcmp_P(dataset.name, PSTR("EJPHPM")) == 0) {
                     static uint32_t value_last = 0;
-                    uint32_t value = strtol(dataset.data, NULL, 10);
+                    uint32_t value = strtoul(dataset.data, NULL, 10);
                     if (value > value_last) {
                         MyMessage message(SENSOR_12_CONTRACT_EJP_INDEX_HPM, V_KWH);
                         if (send(message.set(value / 1000.0, 3)) == true) {
@@ -624,7 +624,7 @@ void loop(void) {
                 /* Option Tempo, index bleu HC */
                 else if (strcmp_P(dataset.name, PSTR("BBRHCJB")) == 0) {
                     static uint32_t value_last = 0;
-                    uint32_t value = strtol(dataset.data, NULL, 10);
+                    uint32_t value = strtoul(dataset.data, NULL, 10);
                     if (value > value_last) {
                         MyMessage message(SENSOR_15_CONTRACT_TEMPO_INDEX_BLUE_OK, V_KWH);
                         if (send(message.set(value / 1000.0, 3)) == true) {
@@ -636,7 +636,7 @@ void loop(void) {
                 /* Option Tempo, index bleu HP */
                 else if (strcmp_P(dataset.name, PSTR("BBRHPJB")) == 0) {
                     static uint32_t value_last = 0;
-                    uint32_t value = strtol(dataset.data, NULL, 10);
+                    uint32_t value = strtoul(dataset.data, NULL, 10);
                     if (value > value_last) {
                         MyMessage message(SENSOR_14_CONTRACT_TEMPO_INDEX_BLUE_PK, V_KWH);
                         if (send(message.set(value / 1000.0, 3)) == true) {
@@ -648,7 +648,7 @@ void loop(void) {
                 /* Option Tempo, index blanc HC */
                 else if (strcmp_P(dataset.name, PSTR("BBRHCJW")) == 0) {
                     static uint32_t value_last = 0;
-                    uint32_t value = strtol(dataset.data, NULL, 10);
+                    uint32_t value = strtoul(dataset.data, NULL, 10);
                     if (value > value_last) {
                         MyMessage message(SENSOR_17_CONTRACT_TEMPO_INDEX_WHITE_OK, V_KWH);
                         if (send(message.set(value / 1000.0, 3)) == true) {
@@ -660,7 +660,7 @@ void loop(void) {
                 /* Option Tempo, index blanc HP */
                 else if (strcmp_P(dataset.name, PSTR("BBRHPJW")) == 0) {
                     static uint32_t value_last = 0;
-                    uint32_t value = strtol(dataset.data, NULL, 10);
+                    uint32_t value = strtoul(dataset.data, NULL, 10);
                     if (value > value_last) {
                         MyMessage message(SENSOR_16_CONTRACT_TEMPO_INDEX_WHITE_PK, V_KWH);
                         if (send(message.set(value / 1000.0, 3)) == true) {
@@ -672,7 +672,7 @@ void loop(void) {
                 /* Option Tempo, index rouge HC */
                 else if (strcmp_P(dataset.name, PSTR("BBRHCJR")) == 0) {
                     static uint32_t value_last = 0;
-                    uint32_t value = strtol(dataset.data, NULL, 10);
+                    uint32_t value = strtoul(dataset.data, NULL, 10);
                     if (value > value_last) {
                         MyMessage message(SENSOR_19_CONTRACT_TEMPO_INDEX_RED_OK, V_KWH);
                         if (send(message.set(value / 1000.0, 3)) == true) {
@@ -684,7 +684,7 @@ void loop(void) {
                 /* Option Tempo, index rouge HP */
                 else if (strcmp_P(dataset.name, PSTR("BBRHPJR")) == 0) {
                     static uint32_t value_last = 0;
-                    uint32_t value = strtol(dataset.data, NULL, 10);
+                    uint32_t value = strtoul(dataset.data, NULL, 10);
                     if (value > value_last) {
                         MyMessage message(SENSOR_18_CONTRACT_TEMPO_INDEX_RED_PK, V_KWH);
                         if (send(message.set(value / 1000.0, 3)) == true) {
