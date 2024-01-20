@@ -42,3 +42,5 @@ In the left bar click on the PlatformIO icon, then on "Project Tasks / General /
 Once it compiles sucessfully, you are ready to upload that firmware to your Linky module. Connect your Linky module to your computer using a USB cable. Still in the left bar click on "Project Tasks / General / Upload".
 
 That's it.
+
+On a side note, because the order of sensors within the code might has changed between the verison you were using and a newer version, it might be necessary to delete and re-add your sensor within your home automation controller (it is the case with Home Assistant).
