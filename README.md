@@ -33,7 +33,7 @@ Because I don't have access to a meter in standard mode, the firmware currently 
 ### Upgrade the firmware
 This firmware requires PlatfomIO. It works as an add-on to Visual Studio Code editor. To install it, follow the instructions [here](https://platformio.org/install/ide?install=vscode).
 
-Retrieve a copy of the firmware code. If git is something you are familiar with or you would like to contribute, that's the recommanded way. Otherwise, simply download and extract the [zip archive](https://github.com/sitronlabs/MySensors-nRF24-Linky-Modue/archive/refs/heads/master.zip) of the latest code.
+Retrieve a copy of the firmware code. If git is something you are familiar with or you would like to contribute, that's the recommanded way. Otherwise, simply download and extract the [zip archive](https://github.com/sitronlabs/MySensors-nRF24-Linky-Module/archive/refs/heads/master.zip) of the latest code.
 
 Open Visual Sutdio Code, select "File / Open Folder" and navigate to the copy of the firmware code you have just downloaded.
 
