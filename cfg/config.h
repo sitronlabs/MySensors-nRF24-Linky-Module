@@ -6,7 +6,8 @@
 #define MY_RADIO_RF24
 #define MY_RF24_CE_PIN 9
 #define MY_RF24_CS_PIN 10
-#define MY_RF24_PA_LEVEL RF24_PA_HIGH
+#define MY_RF24_DATARATE RF24_250KBPS  // Default speed
+#define MY_RF24_PA_LEVEL RF24_PA_LOW   // Increase transmit power if necessary, but RF24_PA_MAX can lead to frame loss because of unstable power rail
 #define MY_DEFAULT_ERR_LED_PIN A0
 #define MY_DEFAULT_TX_LED_PIN A1
 
